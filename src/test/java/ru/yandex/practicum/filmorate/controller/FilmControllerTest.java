@@ -60,15 +60,17 @@ class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(2010, 7, 16));
         film.setDuration(148);
 
-        filmController.addFilm(film);
+        Film addedFilm = filmController.addFilm(film);
+
 
         Film updatedFilm = new Film();
+        updatedFilm.setId(addedFilm.getId());
         updatedFilm.setName("Начало (Обновлено)");
         updatedFilm.setDescription("Обновленное описание");
         updatedFilm.setReleaseDate(LocalDate.of(2010, 7, 16));
         updatedFilm.setDuration(150);
 
-        Film result = filmController.updateFilm(1, updatedFilm);
+        Film result = filmController.updateFilm(updatedFilm);
 
         assertEquals("Начало (Обновлено)", result.getName());
         assertEquals("Обновленное описание", result.getDescription());

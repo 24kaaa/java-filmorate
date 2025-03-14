@@ -33,16 +33,15 @@ public class FilmController {
         return film;
     }
 
-    @PutMapping("/{id}")
-    public Film updateFilm(@PathVariable int id, @RequestBody Film updatedFilm) {
-        if (films.containsKey(id)) {
+    @PutMapping
+    public Film updateFilm(@RequestBody Film updatedFilm) {
+        if (films.containsKey(updatedFilm.getId())) {
             validateFilm(updatedFilm);
-            updatedFilm.setId(id);
-            films.put(id, updatedFilm);
+            films.put(updatedFilm.getId(), updatedFilm);
             log.info("Фильм обновлен: {}", updatedFilm);
             return updatedFilm;
         }
-        throw new ValidationException("Фильм с ID " + id + " не найден.");
+        throw new ValidationException("Фильм с ID " + updatedFilm.getId() + " не найден.");
     }
 
     private void validateFilm(Film film) {

@@ -2,9 +2,13 @@ package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+
 import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 import ru.yandex.practicum.filmorate.model.User;
+
 import java.util.Collection;
 
 class UserControllerTest {
@@ -59,6 +63,15 @@ class UserControllerTest {
 
     @Test
     void updateUser() {
+        User existingUser = new User();
+        existingUser.setId(1);
+        existingUser.setEmail("ivan.old@example.com");
+        existingUser.setLogin("ivanOld123");
+        existingUser.setName("Иван Стариков");
+        existingUser.setBirthday(LocalDate.of(1991, 6, 15));
+
+        userController.addUser(existingUser);
+
         User updatedUser = new User();
         updatedUser.setId(1);
         updatedUser.setEmail("ivan.new@example.com");
@@ -66,7 +79,7 @@ class UserControllerTest {
         updatedUser.setName("Иван Новиков");
         updatedUser.setBirthday(LocalDate.of(1991, 6, 15));
 
-        User resultUser = userController.updateUser(1, updatedUser);
+        User resultUser = userController.updateUser(updatedUser);
 
         assertNotNull(resultUser, "Обновленный пользователь не должен быть null");
         assertEquals(1, resultUser.getId(), "ID обновленного пользователя должен быть 1");

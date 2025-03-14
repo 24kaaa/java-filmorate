@@ -33,8 +33,9 @@ public class UserController {
         return user;
     }
 
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable int id, @RequestBody User updatedUser) {
+    @PutMapping
+    public User updateUser(@RequestBody User updatedUser) {
+        int id = updatedUser.getId();
         if (users.containsKey(id)) {
             validateUser(updatedUser);
             updatedUser.setId(id);
