@@ -11,7 +11,6 @@ import java.util.Collection;
 
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 
-import java.time.LocalDate;
 
 @Slf4j
 @RestController
