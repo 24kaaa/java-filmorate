@@ -8,27 +8,28 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
 import java.util.Collection;
 
 class UserControllerTest {
-    private UserController userController;
+    private InMemoryUserStorage inMemoryUserStorage;
 
     @BeforeEach
     void setUp() {
-        userController = new UserController();
+        inMemoryUserStorage = new InMemoryUserStorage();
         User initialUser = new User();
         initialUser.setId(1);
         initialUser.setEmail("ivan@example.com");
         initialUser.setLogin("ivan123");
         initialUser.setName("Иван");
         initialUser.setBirthday(LocalDate.of(1990, 5, 20));
-        userController.addUser(initialUser);
+        inMemoryUserStorage.addUser(initialUser);
     }
 
     @Test
     void getAllUsers() {
-        Collection<User> users = userController.getAllUsers();
+        Collection<User> users = inMemoryUserStorage.getAllUsers();
         assertEquals(1, users.size(), "Количество пользователей должно быть 1");
 
         User user2 = new User();
@@ -37,9 +38,9 @@ class UserControllerTest {
         user2.setLogin("maria456");
         user2.setName("Мария");
         user2.setBirthday(LocalDate.of(1992, 8, 15));
-        userController.addUser(user2);
+        inMemoryUserStorage.addUser(user2);
 
-        users = userController.getAllUsers();
+        users = inMemoryUserStorage.getAllUsers();
         assertEquals(2, users.size(), "Количество пользователей должно быть 2");
     }
 
@@ -51,7 +52,7 @@ class UserControllerTest {
         newUser.setName("Петр");
         newUser.setBirthday(LocalDate.of(1992, 1, 1));
 
-        User addedUser = userController.addUser(newUser);
+        User addedUser = inMemoryUserStorage.addUser(newUser);
 
         assertNotNull(addedUser, "Добавленный пользователь не должен быть null");
         assertEquals(2, addedUser.getId(), "ID добавленного пользователя должен быть 2");
@@ -70,7 +71,7 @@ class UserControllerTest {
         existingUser.setName("Иван Стариков");
         existingUser.setBirthday(LocalDate.of(1991, 6, 15));
 
-        userController.addUser(existingUser);
+        inMemoryUserStorage.addUser(existingUser);
 
         User updatedUser = new User();
         updatedUser.setId(1);
@@ -79,7 +80,7 @@ class UserControllerTest {
         updatedUser.setName("Иван Новиков");
         updatedUser.setBirthday(LocalDate.of(1991, 6, 15));
 
-        User resultUser = userController.updateUser(updatedUser);
+        User resultUser = inMemoryUserStorage.updateUser(updatedUser);
 
         assertNotNull(resultUser, "Обновленный пользователь не должен быть null");
         assertEquals(1, resultUser.getId(), "ID обновленного пользователя должен быть 1");
