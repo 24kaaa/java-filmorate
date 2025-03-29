@@ -19,7 +19,7 @@ class UserControllerTest {
     void setUp() {
         inMemoryUserStorage = new InMemoryUserStorage();
         User initialUser = new User();
-        initialUser.setId(1);
+        initialUser.setId(1L);
         initialUser.setEmail("ivan@example.com");
         initialUser.setLogin("ivan123");
         initialUser.setName("Иван");
@@ -33,7 +33,7 @@ class UserControllerTest {
         assertEquals(1, users.size(), "Количество пользователей должно быть 1");
 
         User user2 = new User();
-        user2.setId(2);
+        user2.setId(2L);
         user2.setEmail("maria@example.com");
         user2.setLogin("maria456");
         user2.setName("Мария");
@@ -65,7 +65,7 @@ class UserControllerTest {
     @Test
     void updateUser() {
         User existingUser = new User();
-        existingUser.setId(1);
+        existingUser.setId(1L);
         existingUser.setEmail("ivan.old@example.com");
         existingUser.setLogin("ivanOld123");
         existingUser.setName("Иван Стариков");
@@ -74,7 +74,7 @@ class UserControllerTest {
         inMemoryUserStorage.addUser(existingUser);
 
         User updatedUser = new User();
-        updatedUser.setId(1);
+        updatedUser.setId(1L);
         updatedUser.setEmail("ivan.new@example.com");
         updatedUser.setLogin("ivanNew123");
         updatedUser.setName("Иван Новиков");
