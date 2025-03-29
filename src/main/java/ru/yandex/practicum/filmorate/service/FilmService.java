@@ -58,6 +58,6 @@ public class FilmService {
     }
 
     private boolean userExists(Long userId) {
-        return userStorage.getUser (userId).isPresent();
+        return userStorage.getUser(userId).isPresent();
     }
 }
