@@ -3,16 +3,18 @@ package ru.yandex.practicum.filmorate.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
+
 import java.util.Collection;
 import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
 
 class FilmControllerTest {
-    private FilmController filmController;
+    private InMemoryFilmStorage inMemoryFilmStorage;
 
     @BeforeEach
     void setUp() {
-        filmController = new FilmController();
+        inMemoryFilmStorage = new InMemoryFilmStorage();
     }
 
     @Test
@@ -22,16 +24,16 @@ class FilmControllerTest {
         film1.setDescription("Умопомрачительный триллер");
         film1.setReleaseDate(LocalDate.of(2010, 7, 16));
         film1.setDuration(148);
-        filmController.addFilm(film1);
+        inMemoryFilmStorage.addFilm(film1);
 
         Film film2 = new Film();
         film2.setName("Темный рыцарь");
         film2.setDescription("Супергеройский фильм");
         film2.setReleaseDate(LocalDate.of(2008, 7, 18));
         film2.setDuration(152);
-        filmController.addFilm(film2);
+        inMemoryFilmStorage.addFilm(film2);
 
-        Collection<Film> films = filmController.getAllFilms();
+        Collection<Film> films = inMemoryFilmStorage.getAllFilms();
         assertEquals(2, films.size());
     }
 
@@ -43,7 +45,7 @@ class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(2010, 7, 16));
         film.setDuration(148);
 
-        Film result = filmController.addFilm(film);
+        Film result = inMemoryFilmStorage.addFilm(film);
 
         assertNotNull(result.getId());
         assertEquals("Начало", result.getName());
@@ -60,7 +62,7 @@ class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(2010, 7, 16));
         film.setDuration(148);
 
-        Film addedFilm = filmController.addFilm(film);
+        Film addedFilm = inMemoryFilmStorage.addFilm(film);
 
 
         Film updatedFilm = new Film();
@@ -70,7 +72,7 @@ class FilmControllerTest {
         updatedFilm.setReleaseDate(LocalDate.of(2010, 7, 16));
         updatedFilm.setDuration(150);
 
-        Film result = filmController.updateFilm(updatedFilm);
+        Film result = inMemoryFilmStorage.updateFilm(updatedFilm);
 
         assertEquals("Начало (Обновлено)", result.getName());
         assertEquals("Обновленное описание", result.getDescription());
