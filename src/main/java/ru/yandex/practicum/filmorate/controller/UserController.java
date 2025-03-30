@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 
 @Slf4j
@@ -21,21 +21,21 @@ import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final InMemoryUserStorage inMemoryUserStorage;
+    private final UserStorage userStorage;
 
     @GetMapping
     public Collection<User> getAllUsers() {
-        return inMemoryUserStorage.getAllUsers();
+        return userStorage.getAllUsers();
     }
 
     @PostMapping
     public User addUser(@Valid  @RequestBody User user) {
-        return inMemoryUserStorage.addUser(user);
+        return userStorage.addUser(user);
     }
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User updatedUser) {
-        return inMemoryUserStorage.updateUser(updatedUser);
+        return userStorage.updateUser(updatedUser);
     }
 
     @PutMapping("/{userId}/friends/{friendId}")

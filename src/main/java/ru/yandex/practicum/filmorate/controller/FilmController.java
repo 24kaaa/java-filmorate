@@ -10,7 +10,8 @@ import java.util.Collection;
 import java.util.List;
 
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+
 
 @Slf4j
 @RestController
@@ -18,22 +19,22 @@ import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 @RequiredArgsConstructor
 public class FilmController {
 
-    private final InMemoryFilmStorage inMemoryFilmStorage;
+    private final FilmStorage filmStorage;
     private final FilmService filmService;
 
     @GetMapping
     public Collection<Film> getAllFilms() {
-        return inMemoryFilmStorage.getAllFilms();
+        return filmStorage.getAllFilms();
     }
 
     @PostMapping
     public Film addFilm(@Valid @RequestBody Film film) {
-        return inMemoryFilmStorage.addFilm(film);
+        return filmStorage.addFilm(film);
     }
 
     @PutMapping
     public Film updateFilm(@Valid @RequestBody Film updatedFilm) {
-        return inMemoryFilmStorage.updateFilm(updatedFilm);
+        return filmStorage.updateFilm(updatedFilm);
     }
 
     @PutMapping("/{filmId}/like/{userId}")
