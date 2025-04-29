@@ -24,7 +24,7 @@ class UserControllerTest {
         initialUser.setLogin("ivan123");
         initialUser.setName("Иван");
         initialUser.setBirthday(LocalDate.of(1990, 5, 20));
-        inMemoryUserStorage.addUser(initialUser);
+        inMemoryUserStorage.createUser(initialUser);
     }
 
     @Test
@@ -38,7 +38,7 @@ class UserControllerTest {
         user2.setLogin("maria456");
         user2.setName("Мария");
         user2.setBirthday(LocalDate.of(1992, 8, 15));
-        inMemoryUserStorage.addUser(user2);
+        inMemoryUserStorage.createUser(user2);
 
         users = inMemoryUserStorage.getAllUsers();
         assertEquals(2, users.size(), "Количество пользователей должно быть 2");
@@ -52,7 +52,7 @@ class UserControllerTest {
         newUser.setName("Петр");
         newUser.setBirthday(LocalDate.of(1992, 1, 1));
 
-        User addedUser = inMemoryUserStorage.addUser(newUser);
+        User addedUser = inMemoryUserStorage.createUser(newUser);
 
         assertNotNull(addedUser, "Добавленный пользователь не должен быть null");
         assertEquals(2, addedUser.getId(), "ID добавленного пользователя должен быть 2");
@@ -71,7 +71,7 @@ class UserControllerTest {
         existingUser.setName("Иван Стариков");
         existingUser.setBirthday(LocalDate.of(1991, 6, 15));
 
-        inMemoryUserStorage.addUser(existingUser);
+        inMemoryUserStorage.createUser(existingUser);
 
         User updatedUser = new User();
         updatedUser.setId(1L);

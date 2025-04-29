@@ -24,14 +24,14 @@ class FilmControllerTest {
         film1.setDescription("Умопомрачительный триллер");
         film1.setReleaseDate(LocalDate.of(2010, 7, 16));
         film1.setDuration(148);
-        inMemoryFilmStorage.addFilm(film1);
+        inMemoryFilmStorage.createFilm(film1);
 
         Film film2 = new Film();
         film2.setName("Темный рыцарь");
         film2.setDescription("Супергеройский фильм");
         film2.setReleaseDate(LocalDate.of(2008, 7, 18));
         film2.setDuration(152);
-        inMemoryFilmStorage.addFilm(film2);
+        inMemoryFilmStorage.createFilm(film2);
 
         Collection<Film> films = inMemoryFilmStorage.getAllFilms();
         assertEquals(2, films.size());
@@ -45,7 +45,7 @@ class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(2010, 7, 16));
         film.setDuration(148);
 
-        Film result = inMemoryFilmStorage.addFilm(film);
+        Film result = inMemoryFilmStorage.createFilm(film);
 
         assertNotNull(result.getId());
         assertEquals("Начало", result.getName());
@@ -62,7 +62,7 @@ class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(2010, 7, 16));
         film.setDuration(148);
 
-        Film addedFilm = inMemoryFilmStorage.addFilm(film);
+        Film addedFilm = inMemoryFilmStorage.createFilm(film);
 
 
         Film updatedFilm = new Film();
