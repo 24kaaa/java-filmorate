@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface MpaStorage {
+
     Collection<MpaRating> getAllMpaRatings();
+
     Optional<MpaRating> getMpaRatingById(int id);
 }
