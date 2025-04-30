@@ -1,0 +1,120 @@
+package ru.yandex.practicum.filmorate.service.impl;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
+import ru.yandex.practicum.filmorate.storage.like.LikeStorage;
+import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+@Service
+@Slf4j
+public class FilmServiceImpl implements FilmService {
+
+    private final FilmStorage filmStorage;
+    private final MpaStorage mpaStorage;
+    private final GenreStorage genreStorage;
+    private final LikeStorage likeStorage;
+
+    public FilmServiceImpl(@Qualifier("filmDbStorage") FilmStorage filmStorage,
+                           MpaStorage mpaRatingStorage,
+                           GenreStorage genreStorage, LikeStorage likeStorage) {
+        this.filmStorage = filmStorage;
+        this.mpaStorage = mpaRatingStorage;
+        this.genreStorage = genreStorage;
+        this.likeStorage = likeStorage;
+    }
+
+    @Override
+    public void addLike(Long filmId, Long userId) {
+        log.info("Добавление лайка фильму с id {} от пользователя с id {}", filmId, userId);
+        likeStorage.addLike(filmId, userId);
+        log.info("Пользователь c id {} поставил лайк фильму c id {}", userId, filmId);
+    }
+
+    @Override
+    public void deleteLike(Long filmId, Long userId) {
+        log.info("Удаление лайка фильму с id {} от пользователя с id {}", filmId, userId);
+        likeStorage.deleteLike(filmId, userId);
+        log.info("Пользователь с id {} удалил лайк с id фильму {}", userId, filmId);
+    }
+
+    @Override
+    public List<Film> getPopularFilms(int count) {
+        log.info("Получение топ {} популярных фильмов по количеству лайков.", count);
+        List<Film> films = filmStorage.findPopularFilms(count);
+        return enrichFilmsWithGenresAndLikes(films);
+    }
+
+    @Override
+    public List<Film> getAll() {
+        log.info("Получение всех фильмов");
+        List<Film> films = filmStorage.getAllFilms();
+        return enrichFilmsWithGenresAndLikes(films);
+    }
+
+    @Override
+    public Film createFilm(Film film) {
+        log.info("Создание фильма: {}", film);
+        getFilmOrThrow(film);
+        return filmStorage.createFilm(film);
+    }
+
+    @Override
+    public Film updateFilm(Film film) {
+        log.info("Обновление фильма: {}", film);
+        getFilmOrThrow(film);
+        return filmStorage.updateFilm(film);
+    }
+
+    @Override
+    public Optional<Film> getFilmById(Long id) {
+        log.info("Получение фильма по id: {}", id);
+        return filmStorage.getFilm(id);
+    }
+
+    private List<Film> enrichFilmsWithGenresAndLikes(List<Film> films) {
+        Map<Long, Set<Genre>> filmGenres = genreStorage.findAllFilmGenres();
+        Map<Long, Set<Long>> filmLikes = likeStorage.findAllFilmLikes();
+
+        return films.stream()
+                .peek(film -> {
+                    film.setGenres(filmGenres.getOrDefault(film.getId(), new HashSet<>()));
+                    film.setLikes(filmLikes.getOrDefault(film.getId(), new HashSet<>()));
+                })
+                .collect(Collectors.toList());
+    }
+
+    private void getFilmOrThrow(Film film) {
+
+        if (mpaStorage.getMpaRatingById(film.getMpaRating().getId()).isEmpty()) {
+            throw new NotFoundException("МРА рейтинг с id " + film.getMpaRating().getId() + " не найден.");
+        }
+
+        if (film.getGenres() != null && !film.getGenres().isEmpty()) {
+            List<Integer> genreIds = film.getGenres().stream()
+                    .map(Genre::getId)
+                    .collect(Collectors.toList());
+
+            List<Genre> existingGenres = genreStorage.getAllGenres();
+
+            Set<Integer> existingGenreIds = existingGenres.stream()
+                    .map(Genre::getId)
+                    .collect(Collectors.toSet());
+
+            for (int genreId : genreIds) {
+                if (!existingGenreIds.contains(genreId)) {
+                    throw new NotFoundException("Жанр с id " + genreId + " не найден.");
+                }
+            }
+        }
+    }
+}
