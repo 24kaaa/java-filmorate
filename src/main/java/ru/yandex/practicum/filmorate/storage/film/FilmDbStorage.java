@@ -10,6 +10,7 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.AbstractDbStorage;
 import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -72,11 +73,14 @@ public class FilmDbStorage extends AbstractDbStorage<Film> implements FilmStorag
         );
         film.setId(filmId);
         if (film.getGenres() != null && !film.getGenres().isEmpty()) {
+            List<Object[]> batchArgs = new ArrayList<>();
             for (Genre genre : film.getGenres()) {
-                update(INSERT_FILM_GENRES_QUERY, filmId, genre.getId());
+                batchArgs.add(new Object[]{filmId, genre.getId()});
             }
+            jdbcTemplate.batchUpdate(INSERT_FILM_GENRES_QUERY, batchArgs);
         }
         return film;
+
     }
 
     @Override

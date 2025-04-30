@@ -1,10 +1,11 @@
 package ru.yandex.practicum.filmorate.storage.film;
 
-import org.springframework.stereotype.Repository;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.yandex.practicum.filmorate.model.*;
 import java.util.stream.Collectors;
 
-@Repository
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FilmMapper {
 
     public static FilmDto mapToFilmDto(Film film) {

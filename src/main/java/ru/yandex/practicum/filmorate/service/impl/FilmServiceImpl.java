@@ -94,13 +94,25 @@ public class FilmServiceImpl implements FilmService {
     }
 
     private void getFilmOrThrow(Film film) {
+
         if (mpaStorage.getMpaRatingById(film.getMpaRating().getId()).isEmpty()) {
             throw new NotFoundException("МРА рейтинг с id " + film.getMpaRating().getId() + " не найден.");
         }
+
         if (film.getGenres() != null && !film.getGenres().isEmpty()) {
-            for (Genre genre : film.getGenres()) {
-                if (genreStorage.getGenre(genre.getId()).isEmpty()) {
-                    throw new NotFoundException("Жанр с id " + genre.getId() + " не найден.");
+            List<Integer> genreIds = film.getGenres().stream()
+                    .map(Genre::getId)
+                    .collect(Collectors.toList());
+
+            List<Genre> existingGenres = genreStorage.getAllGenres();
+
+            Set<Integer> existingGenreIds = existingGenres.stream()
+                    .map(Genre::getId)
+                    .collect(Collectors.toSet());
+
+            for (int genreId : genreIds) {
+                if (!existingGenreIds.contains(genreId)) {
+                    throw new NotFoundException("Жанр с id " + genreId + " не найден.");
                 }
             }
         }
