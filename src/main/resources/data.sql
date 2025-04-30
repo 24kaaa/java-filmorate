@@ -1,11 +1,3 @@
-SET REFERENTIAL_INTEGRITY FALSE;
-
-DELETE FROM mpa_ratings;
-DELETE FROM genres;
-
-SET REFERENTIAL_INTEGRITY TRUE;
-
-
 INSERT INTO mpa (mpa_id, name) VALUES
   (1, 'G'),
   (2, 'PG'),
