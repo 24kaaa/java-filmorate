@@ -1,3 +1,4 @@
+DELETE FROM mpa;
 INSERT INTO mpa (mpa_id, name) VALUES
   (1, 'G'),
   (2, 'PG'),
@@ -5,6 +6,7 @@ INSERT INTO mpa (mpa_id, name) VALUES
   (4, 'R'),
   (5, 'NC-17');
 
+DELETE FROM genres;
 INSERT INTO genres (genre_id, name) VALUES
   (1, 'Комедия'),
   (2, 'Драма'),
